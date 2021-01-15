@@ -1,21 +1,60 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from "react";
+import { SafeAreaView,  } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+import HomeScreen from "./src/screen/home";
+import AddScreen from "./src/screen/add";
+import ReportScreen from "./src/screen/report";
+import ClassScreen from "./src/screen/class";
+import SettingScreen from "./src/screen/setting";
+import TabsUI from "./src/component/tab";
+
+import { useNavigation } from "@react-navigation/native";
+
+const Tab = createBottomTabNavigator();
+const tabs = [
+  { name: "Home" },
+  { name: "Report" },
+  { name: "Class" },
+  { name: "Setting" },
+  { name: "Add" },
+];
+
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hide: false,
+    };
+  }
+
+  setHide(b) {
+    this.setState({
+      hide: b,
+    });
+  }
+
+  render() {
+    return (
+        <NavigationContainer>
+          <Tab.Navigator
+            tabBarVisible={true}
+            tabBar={(props) => {
+              return <TabsUI {...{ tabs, ...props }} />;
+            }}
+          >
+            <Tab.Screen name={tabs[0].name} component={HomeScreen} />
+            <Tab.Screen name={tabs[1].name} component={ReportScreen} />
+            <Tab.Screen name={tabs[2].name} component={ClassScreen} />
+            <Tab.Screen name={tabs[3].name} component={SettingScreen} />
+            <Tab.Screen
+              name={tabs[4].name}
+              component={AddScreen}
+              isFocused={() => {}}
+            />
+          </Tab.Navigator>
+        </NavigationContainer>
+    );
+  }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
